@@ -57,6 +57,8 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
       ASPNETCORE_URLS: "http://+:5048"
       Database__Provider: ${DB_PROVIDER:-PostgreSQL}
+      # Connection String template used by BranchConnectionFactory:
+      ConnectionStrings__BranchTemplate: ${BRANCH_CONNECTION_TEMPLATE:-Host=postgres;Port=5432;Database=${POSTGRES_DB:-uiforge_db};Username=${POSTGRES_USER:-uiforge_admin};Password=${POSTGRES_PASSWORD:-UIForge_Secure_Pass_2026!}}
       # Connection String for PostgreSQL:
       ConnectionStrings__PostgreSQLConnection: "Host=postgres;Port=5432;Database=${POSTGRES_DB:-uiforge_db};Username=${POSTGRES_USER:-uiforge_admin};Password=${POSTGRES_PASSWORD:-UIForge_Secure_Pass_2026!}"
       # Connection String for SQL Server (used when DB_PROVIDER=SqlServer):

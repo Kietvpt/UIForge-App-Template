@@ -1,0 +1,26 @@
+# Override file để chạy thử trực tiếp trên Docker Desktop (Local Windows/Mac)
+# Chạy bằng lệnh:
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+
+services:
+  backend:
+    ports:
+      - "5048:5048"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Cors__AllowedOrigins__0: "http://localhost:3000"
+      Cors__AllowedOrigins__1: "http://localhost:5173"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: "http://localhost:5048"
+    ports:
+      - "3000:80"
+
+  # Tắt Caddy Auto-SSL khi chạy local vì không có domain công khai
+  caddy:
+    profiles:
+      - prod-only
