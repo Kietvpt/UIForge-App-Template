@@ -1,0 +1,7 @@
+# =========================================================================
+# 📦 Hướng dẫn cài đặt @uiforge/core từ GitHub Packages (Private Registry)
+# =========================================================================
+# Khi tải từ GitHub Packages thay vì file cục bộ trong packages/, đổi tên file này thành .npmrc:
+#
+# @uiforge:registry=https://npm.pkg.github.com
+# //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}

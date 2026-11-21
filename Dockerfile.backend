@@ -1,0 +1,42 @@
+# =================================================================
+# 🚀 UIForge-App-Template Backend Dockerfile (.NET 8 Runtime)
+# =================================================================
+
+# 1. Build & Publish Stage
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+WORKDIR /src
+
+# Copy nuget config and local NuGet package cache
+COPY ["backend/nuget.config", "backend/"]
+COPY ["packages/", "packages/"]
+
+# Copy project file and restore dependencies
+COPY ["backend/App.API/App.API.csproj", "backend/App.API/"]
+RUN dotnet restore "backend/App.API/App.API.csproj"
+
+# Copy full backend source code
+COPY backend/ backend/
+
+# Publish Release
+WORKDIR "/src/backend/App.API"
+RUN dotnet publish "App.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# 2. Final Runtime Stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+WORKDIR /app
+
+# Install cultures and tzdata
+RUN apk add --no-cache icu-libs tzdata
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    ASPNETCORE_URLS=http://+:5048 \
+    ASPNETCORE_ENVIRONMENT=Production
+
+COPY --from=build /app/publish .
+
+EXPOSE 5048
+
+# Health check
+HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:5048/swagger/v1/swagger.json || exit 1
+
+ENTRYPOINT ["dotnet", "App.API.dll"]

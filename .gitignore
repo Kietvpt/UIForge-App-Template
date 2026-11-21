@@ -1,0 +1,25 @@
+# Dependencies & Build Outputs
+node_modules/
+dist/
+dist-lib/
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+frontend/.npmrc
+*.db
+*.db-shm
+*.db-wal
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
